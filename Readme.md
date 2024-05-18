@@ -21,6 +21,9 @@ This repository contains solutions for the leetcode challenges and problems.
     <li>
         <b>287. Find the Duplicate Number</b>
     </li>
+    <li>
+        <b>Arista Round 2. Find the peak element in semi-sorted array. </b>
+    </li>
 </ol>
 
 

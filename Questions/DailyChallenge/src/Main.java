@@ -17,11 +17,7 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("Hello world!");
         simplifyPath("/home/user/Documents/../Pictures");
-
-        LinkedList<String> list = new LinkedList<>();
-
-        TreeMap<Integer, Integer> map = new TreeMap<>();
-        Map.Entry<Integer,Integer> ke1 = map.floorEntry(1) ;
+        
 
     }
 

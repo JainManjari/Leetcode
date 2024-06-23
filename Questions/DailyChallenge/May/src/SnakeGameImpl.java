@@ -12,11 +12,11 @@ class Node10 {
 
 class Snake {
     Node10 head;
-    List<Node10> body;
+    LinkedList<Node10> body;
 
     public Snake() {
         this.head = new Node10(0, 0);
-        this.body = new ArrayList<>();
+        this.body = new LinkedList<>();
     }
 }
 
@@ -47,103 +47,28 @@ class SnakeGame {
             return -1;
         }
 
-        boolean isPossible = isPossibleThenMove(direction);
+        Node10 newHead = isMovePossible(direction, snake.head);
 
-        if (!isPossible) {
+        if (newHead == null) {
             isGameover = true;
             return -1;
         }
 
-        boolean hasEatenFood = hasEatenFood();
+        boolean hasEatenFood = hasEatenFood(newHead);
 
         if (hasEatenFood) {
-            boolean growSnake = growSnake(direction);
+            snake.body.addFirst(snake.head);
             this.score += 1;
+        } else if(!snake.body.isEmpty()){
+            snake.body.addFirst(snake.head);
+            snake.body.removeLast();
         }
 
+        snake.head = newHead;
         return this.score;
     }
 
-    private boolean growSnake(String dir) {
-        Node10 tail = snake.head;
-
-        List<Node10> body = snake.body;
-
-        if (!body.isEmpty()) {
-            tail = snake.body.get(snake.body.size() - 1);
-        }
-
-        String growDir = "";
-
-        if (dir.equalsIgnoreCase("L")) {
-            growDir = "R";
-        } else if (dir.equalsIgnoreCase("R")) {
-            growDir = "L";
-        } else if (dir.equalsIgnoreCase("U")) {
-            growDir = "D";
-        } else {
-            growDir = "U";
-        }
-
-        Node10 newTail = isMovePossible(growDir, tail);
-
-        if (newTail != null) {
-            snake.body.add(newTail);
-            return true;
-        }
-
-
-        Node10 prevTail = snake.head;
-
-        if(body.size()>1) {
-            prevTail = body.get(body.size()-2);
-        }
-
-        growDir = "";
-        Set<String> set = new HashSet<>();
-        if(prevTail.row==tail.row) {
-            if(prevTail.col==tail.col+1) {
-                growDir="L";
-            } else {
-                growDir = "R";
-            }
-            set.add("L");
-            set.add("R");
-        } else {
-            if(prevTail.row==tail.row+1) {
-                growDir="U";
-            } else {
-                growDir = "D";
-            }
-            set.add("U");
-            set.add("D");
-        }
-
-        newTail = isMovePossible(growDir, tail);
-
-        if (newTail != null) {
-            snake.body.add(newTail);
-            return true;
-        }
-
-
-        String directions[] = { "U", "D", "L", "R" };
-
-        for (int i = 0; i < directions.length; i++) {
-            if (!set.contains(directions[i])) {
-                newTail = isMovePossible(directions[i], tail);
-                if (newTail != null) {
-                    snake.body.add(newTail);
-                    return true;
-                }
-            }
-        }
-
-        return false;
-
-    }
-
-    private boolean hasEatenFood() {
+    private boolean hasEatenFood(Node10 newHead) {
 
         if (foodIndex >= food.length) {
             return false;
@@ -151,7 +76,7 @@ class SnakeGame {
 
         int foodPosition[] = food[foodIndex];
 
-        if (snake.head.row == foodPosition[0] && snake.head.col == foodPosition[1]) {
+        if (newHead.row == foodPosition[0] && newHead.col == foodPosition[1]) {
             foodIndex++;
             return true;
         }
@@ -183,46 +108,27 @@ class SnakeGame {
         }
 
         List<Node10> body = snake.body;
-        for (Node10 nde : body) {
+        for (int i=0;i<body.size()-1;i++) {
+            Node10 nde = body.get(i);
             if (nde.row == newRow && nde.col == newCol) {
-                return null;
+
+                    return null;
+
             }
         }
 
         return new Node10(newRow, newCol);
     }
 
-    private boolean isPossibleThenMove(String dir) {
-        Node10 newHead = isMovePossible(dir, snake.head);
-
-        if (newHead == null) {
-            return false;
-        }
-
-        Node10 prevHead = snake.head;
-        List<Node10> body = snake.body;
-        snake.head = newHead;
-
-        if (!body.isEmpty()) {
-            List<Node10> newBody = new ArrayList<>();
-            newBody.add(prevHead);
-            for (int i = 1; i < body.size(); i++) {
-                newBody.add(body.get(i - 1));
-            }
-            snake.body = newBody;
-        }
-
-        return true;
-    }
 }
 
 public class SnakeGameImpl {
 
     public static void main(String[] args) {
-            int[][] food ={{1,2},{0,1},{0,0},{1,0},{0,2}};
-            SnakeGame snakeGame = new SnakeGame(3,2,food);
+            int[][] food ={{2,0},{0,0},{0,2},{1,1},{2,2}};
+            SnakeGame snakeGame = new SnakeGame(3,3,food);
 
-            String[] dir ={"R","D","R","U","L","D","L","U","R","R"};
+            String[] dir ={"D","D","R","U","U","L","D","R","R","U","L","D","D","L"};
             for (String s : dir) {
                 System.out.println(snakeGame.move(s));
             }

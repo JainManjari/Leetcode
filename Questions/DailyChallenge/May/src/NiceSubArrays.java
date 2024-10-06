@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.stream.Collectors;
 
 class Solution3 {
     public int numberOfSubarrays(int[] a, int k) {
@@ -105,6 +106,7 @@ class Solution3 {
 public class NiceSubArrays {
 
     public static void main(String[] args) {
+        List<String> list = new ArrayList<>();
         int a[] = {2,2,2,1,2,2,1,2,2,2};
         int k = 2;
         Solution3 solution3 = new Solution3();
